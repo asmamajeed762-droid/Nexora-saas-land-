@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Nexora brings your pipeline, billing and customer conversations into one calm workspace. Start a free 14-day trial."><meta name="theme-color" content="#141A3D"><meta property="og:type" content="website"><meta property="og:title" content="Nexora - Close more deals from one workspace"><meta property="og:description" content="One calm workspace for pipeline, billing and customers. Start a free 14-day trial."><title>Nexora – Close more deals from one workspace</title>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  // Brand colors and font become Tailwind classes (bg-navy-900, text-azure, ...)
+  tailwind.config = { theme: { extend: {
+    colors: { navy: { 900: '#141A3D', 950: '#0D1230' }, azure: '#3D4DF2', mint: '#3DDC97', mist: '#F4F7FD', line: '#E1E7F5' },
+    fontFamily: { sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] }
+  } } };
+</script>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); color-scheme: light; }
+  html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+  body { background: #fff; color: #141A3D; -webkit-font-smoothing: antialiased; }
+  :focus-visible { outline: 2px solid #3D4DF2; outline-offset: 3px; }
+  .draw { stroke-dasharray: 700; stroke-dashoffset: 700; animation: draw 2s .4s cubic-bezier(.4,0,.2,1) forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) { .draw { animation: none; stroke-dashoffset: 0; } html { scroll-behavior: auto; } * { transition: none !important; } }
+
+  .swap { animation: swapIn .6s cubic-bezier(.2,.7,.2,1); }
+  @keyframes swapIn { from { opacity: 0; transform: translateY(.35em); } to { opacity: 1; transform: none; } }
+  .float { animation: float 5s ease-in-out infinite; }
+  .float-slow { animation: float 6.5s ease-in-out -2s infinite; }
+  @keyframes float { 50% { transform: translateY(-9px); } }
+  .marquee { animation: marquee 34s linear infinite; }
+  .ping { transform-box: fill-box; transform-origin: center; animation: ping 1.6s ease-out infinite; }
+  @keyframes ping { from { transform: scale(1); opacity: .6; } to { transform: scale(3); opacity: 0; } }
+  .marquee:hover { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  .drawin { stroke-dasharray: 1; stroke-dashoffset: 1; animation: drawin 1.5s ease forwards; }
+  @keyframes drawin { to { stroke-dashoffset: 0; } }
+  .fadein { opacity: 0; animation: fadein .8s ease 1.2s forwards; }
+  @keyframes fadein { to { opacity: 1; } }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .swap, .float, .float-slow, .marquee, .ping, .drawin, .fadein { animation: none !important; }
+    .drawin { stroke-dashoffset: 0; }
+    .fadein { opacity: 1; }
+    .marquee { width: auto !important; flex-wrap: wrap; justify-content: center; }
+    .marquee-dup { display: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+  .flow { stroke-dasharray: 6 6; animation: flow 1s linear infinite; }
+  @keyframes flow { to { stroke-dashoffset: -12; } }
+  .spin { width: 28px; height: 28px; border: 3px solid rgba(255,255,255,.25); border-top-color: #fff; border-radius: 50%; animation: spin .9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .flow, .spin { animation: none; } }
+</style>
+</head>
+<body>
+<div id="root"><div id="boot" style="display:flex;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#141A3D;color:#fff;font-family:system-ui,sans-serif"><svg viewBox="0 0 32 32" width="44" height="44" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#3D4DF2"/><path d="M9 23V9l14 14V9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="spin"></div><p style="margin:0;font-size:14px;opacity:.8">Loading Nexora</p></div></div>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useRef, useEffect } = React;
+
+/* IMAGES: all pictures live here. In the zip they are files inside the images/ folder. */
+const IMG = {
+  hero: 'images/hero.jpg',
+  // DEMO logos: replace with your real customer or partner logos before launch
+  logos: [['Google', 'images/google.png'], ['Microsoft', 'images/microsoft.png'], ['Slack', 'images/slack.png'], ['Figma', 'images/figma.png'], ['Notion', 'images/notion.png'], ['Zoom', 'images/zoom.png']],
+  // DEMO avatars for the demo testimonials below
+  people: { amara: 'images/amara.jpg', daniel: 'images/daniel.jpg', priya: 'images/priya.jpg' },
+};
+
+/* ---------- 1. CONTENT: change the text here ---------- */
+const navLinks = [['Features', '#features'], ['Automation', '#automation'], ['Demo', '#demo'], ['Pricing', '#pricing'], ['FAQ', '#faq'], ['Contact', '#contact']];
+const perks = [
+  { icon: 'M4 6h16M4 12h10M4 18h6', title: 'Organize your pipeline', text: 'Leads, deals and renewals sit on one board your whole team can read at a glance.' },
+  { icon: 'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21c0-4 3.5-6 8-6s8 2 8 6', title: 'Manage customers', text: 'Every email and note lives beside the account it belongs to, so nothing gets lost.' },
+  { icon: 'M3 17l6-6 4 4 8-9', title: 'Track progress fast', text: 'Forecasts update the moment a deal moves, so your Monday numbers are real.' },
+];
+const plans = [
+  { name: 'Starter', price: 19, items: ['Up to 5 seats', 'Shared pipeline', 'Email sync', 'Community support'] },
+  { name: 'Growth', price: 49, featured: true, items: ['Unlimited seats', 'Live forecasting', 'Automated billing', 'Priority support', 'Open API access'] },
+  { name: 'Scale', price: 119, items: ['Everything in Growth', 'Single sign-on', 'Audit log', 'Dedicated manager', '99.99% uptime SLA'] },
+];
+// DEMO testimonials: names and companies are made up. Add real quotes only when they are genuine.
+const quotes = [
+  { text: 'We closed our books in two days instead of eight. Nexora quietly replaced three tools and one stressful spreadsheet.', name: 'Amara Okafor', role: 'VP Finance, Lumen Freight', photo: 'amara' },
+  { text: 'My reps update one board and my forecast is simply right. I stopped chasing people for numbers.', name: 'Daniel Reyes', role: 'Head of Sales, Haverly', photo: 'daniel' },
+  { text: 'Setup took one afternoon. Support answered in minutes and the API did everything we asked.', name: 'Priya Nair', role: 'COO, Tidewell Health', photo: 'priya' },
+];
+const footerCols = [
+  ['Product', ['Features', 'Pricing', 'Integrations', 'Changelog']],
+  ['Company', ['About', 'Careers', 'Press', 'Contact']],
+  ['Resources', ['Help center', 'API docs', 'Guides', 'Status']],
+  ['Legal', ['Privacy policy', 'Terms', 'Security']],
+];
+
+/* ---------- 2. SMALL REUSABLE PIECES ---------- */
+const Icon = ({ d, className = 'h-5 w-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true"><path d={d} /></svg>
+);
+const Logo = () => (
+  <a href="#top" className="flex items-center gap-2 text-xl font-extrabold text-white">
+    <svg viewBox="0 0 32 32" className="h-7 w-7" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#3D4DF2" /><path d="M9 23V9l14 14V9" stroke="#fff" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+    Nexora
+  </a>
+);
+const btn = 'inline-flex items-center justify-center rounded-lg bg-azure px-5 py-3 text-sm font-bold text-white transition hover:bg-[#2c3bd6]';
+const textLink = 'inline-flex items-center gap-2 text-sm font-bold';
+
+// Runs once when an element scrolls into view (used to grow the bars)
+function useInView() {
+  const ref = useRef(null);
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setSeen(true); io.disconnect(); } }, { threshold: 0.15 });
+    io.observe(ref.current);
+    return () => io.disconnect();
+  }, []);
+  return [ref, seen];
+}
+
+// Illustrations (no photos, so everything works offline)
+const Person = ({ bg, shirt, skin }) => (
+  <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden="true">
+    <rect width="100" height="100" fill={bg} /><circle cx="50" cy="40" r="16" fill={skin} />
+    <path d="M18 100c0-22 14-34 32-34s32 12 32 34z" fill={shirt} />
+  </svg>
+);
+
+
+
+
+
+
+
+// Text on one side, a visual on the other. `reverse` swaps the sides on desktop.
+function Showcase({ title, text, visual, reverse }) {
+  return (
+    <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 lg:grid-cols-2 lg:gap-20">
+      <Reveal className={'mx-auto w-full max-w-lg ' + (reverse ? 'lg:order-2' : '')}>{visual}</Reveal>
+      <Reveal delay={120} className={reverse ? 'lg:order-1' : ''}>
+        <h3 className="text-3xl font-extrabold leading-tight sm:text-4xl">{title}</h3>
+        <p className="mt-4 max-w-md leading-relaxed text-navy-900/85">{text}</p>
+        <a href="#pricing" className={textLink + ' mt-6 text-azure'}>Start a free trial <Icon d="M5 12h14M13 6l6 6-6 6" className="h-4 w-4" /></a>
+      </Reveal>
+    </div>
+  );
+}
+
+/* ---------- 3. SECTIONS ---------- */
+// ---------- Animated dashboard: numbers count up, lines draw, bars grow, new sales keep arriving ----------
+const DASH = {
+  blue: [35, 108, 80, 97, 160, 225, 185, 147, 182, 104, 160, 237],
+  gold: [28, 70, 30, 62, 130, 95, 80, 78, 145, 180, 170, 165],
+  bars: [[100, 55], [140, 78], [160, 93], [185, 113], [210, 125], [242, 146]],
+  sparks: ['M0 24L12 17L24 21L34 22L44 6L56 18L68 11L80 8L100 5', 'M0 24L14 14L28 20L42 10L56 16L68 5L82 14L100 7', 'M0 24L14 18L26 21L40 13L52 5L64 18L78 12L100 7'],
+  // DEMO sales: made-up names
+  sales: [['Aisha Khan', 'Pro', 99, 'Paid'], ['Tom Becker', 'Team', 249, 'Paid'], ['Lina Ortiz', 'Starter', 29, 'Pending'], ['Omar Haddad', 'Pro', 99, 'Paid'], ['Mei Tanaka', 'Team', 249, 'Paid'], ['Ravi Patel', 'Starter', 29, 'Paid']],
+};
+const planTone = { Pro: 'bg-azure text-white', Team: 'bg-navy-900 text-white', Starter: 'bg-mist text-navy-900' };
+const good = 'bg-mint/20 text-[#119a60]';
+const plot = (vals, x0, w, y0, h) => vals.map((v, i) => (i ? 'L' : 'M') + (x0 + (i * w) / (vals.length - 1)).toFixed(1) + ' ' + (y0 + h - (v / 250) * h).toFixed(1)).join(' ');
+const drawIn = (seen, ms, delay = 0) => ({ strokeDasharray: 1, strokeDashoffset: seen ? 0 : 1, transition: 'stroke-dashoffset ' + ms + 'ms ease ' + delay + 'ms' });
+const fmt = n => n.toLocaleString('en-US');
+
+// Counts from 0 up to `target` once `run` becomes true
+function useCountUp(target, run, ms = 1500) {
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    if (!run) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setV(target); return; }
+    let raf, t0;
+    const step = t => {
+      t0 = t0 || t;
+      const p = Math.min((t - t0) / ms, 1);
+      setV(target * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [run]);
+  return v;
+}
+
+function Stat({ label, value, badge, tone, spark, color, seen, children }) {
+  return (
+    <div className="rounded-lg border border-line p-2">
+      <p className="text-[10px] text-navy-900/75">{label}</p>
+      <div className="flex items-center justify-between gap-1"><b className="text-sm tabular-nums">{value}</b><span className={'rounded px-1 text-[9px] font-bold ' + tone}>{badge}</span></div>
+      {spark && (
+        <svg viewBox="0 0 100 28" preserveAspectRatio="none" className="mt-1 h-6 w-full" aria-hidden="true">
+          <path d={spark} pathLength="1" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={drawIn(seen, 1600, 200)} />
+        </svg>
+      )}
+      {children}
+    </div>
+  );
+}
+
+function LiveDashboard() {
+  const [ref, seen] = useInView();
+  const [tick, setTick] = useState(0); // goes up every 1.8s and makes the numbers, last bar and sales list move
+  useEffect(() => {
+    if (!seen || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = setInterval(() => setTick(n => n + 1), 1800);
+    return () => clearInterval(t);
+  }, [seen]);
+
+  const users = Math.round(useCountUp(5840, seen)) + tick * 2 + Math.floor(tick / 3);
+  const revenue = Math.round(useCountUp(98500, seen)) + tick * 70 + Math.floor(tick / 2) * 35;
+  const signups = Math.round(useCountUp(1210, seen)) + Math.floor(tick / 2);
+  const conv = useCountUp(2.4, seen);
+  const k = Math.floor(tick / 2);
+  const rows = [k + 2, k + 1, k]; // newest first
+  const wobT = Math.round(Math.sin(tick * 1.3) * 10), wobB = Math.round(Math.cos(tick * 1.7) * 6);
+  const cols = 'grid-cols-[1fr_1.4fr_1fr_.9fr] sm:grid-cols-[1fr_1.3fr_.7fr_.9fr_.8fr]';
+  const icons = ['M4 4h7v7H4zM13 4h7v4h-7zM13 11h7v9h-7zM4 14h7v6H4z', 'M3 17l6-6 4 4 8-9', 'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21c0-4 3.5-6 8-6s8 2 8 6', 'M12 3v18M16 7H10a3 3 0 000 6h4a3 3 0 010 6H7', 'M6 3h9l4 4v14H6zM9 12h7M9 16h7'];
+
+  return (
+    <div ref={ref} className="overflow-hidden rounded-2xl border-4 border-azure bg-white text-navy-900 shadow-xl shadow-azure/25">
+      <div className="flex">
+        <aside className="hidden w-11 shrink-0 flex-col items-center gap-3 border-r border-line bg-mist/60 py-3 sm:flex">
+          <svg viewBox="0 0 32 32" className="h-6 w-6" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#3D4DF2" /><path d="M9 23V9l14 14V9" stroke="#fff" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          {icons.map((d, i) => <span key={i} className={'flex h-7 w-7 items-center justify-center rounded-md ' + (i === 0 ? 'bg-azure/10 text-azure' : 'text-navy-900/65')}><Icon d={d} className="h-4 w-4" /></span>)}
+        </aside>
+        <div className="min-w-0 flex-1 p-3 sm:p-4">
+          <div className="flex items-center justify-between">
+            <div><p className="text-sm font-extrabold">Welcome back, Sam!</p><p className="text-[10px] text-navy-900/75">Dashboard overview</p></div>
+            <span className="flex items-center gap-1.5 rounded-full bg-mist px-2 py-1 text-[10px] font-bold"><i className="relative h-1.5 w-1.5 rounded-full bg-mint"><i className="ping absolute inset-0 rounded-full bg-mint" /></i>Live</span>
+          </div>
+
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <Stat label="Active users" value={fmt(users)} badge="+12%" tone={good} spark={DASH.sparks[0]} color="#7B5CE6" seen={seen} />
+            <Stat label="Monthly revenue" value={'$' + fmt(revenue)} badge="+8%" tone={good} spark={DASH.sparks[1]} color="#3D4DF2" seen={seen} />
+            <Stat label="New signups" value={fmt(signups)} badge="+15%" tone="bg-amber-100 text-amber-700" spark={DASH.sparks[2]} color="#E8A93A" seen={seen} />
+            <Stat label="Conversion rate" value={conv.toFixed(1) + '%'} badge="+0.5%" tone={good} seen={seen}>
+              <div className="mt-3 h-1.5 rounded-full bg-mist"><div className="h-1.5 rounded-full bg-mint" style={{ width: seen ? '24%' : '0%', transition: 'width 1.6s ease .3s' }} /></div>
+            </Stat>
+          </div>
+
+          <div className="mt-2 grid grid-cols-5 gap-2">
+            <div className="col-span-3 rounded-lg border border-line p-2">
+              <p className="text-[11px] font-bold">Revenue performance</p>
+              <svg viewBox="0 0 330 135" className="mt-1 w-full" role="img" aria-label="Revenue rising over twelve months">
+                {[0, 125, 250].map(v => { const y = 4 + 110 - (v / 250) * 110; return <g key={v}><line x1="30" x2="326" y1={y} y2={y} stroke="#E1E7F5" /><text x="0" y={y + 3} fontSize="8" fill="#8A93B2">${v}</text></g>; })}
+                {Array.from({ length: 12 }, (_, i) => <text key={i} x={30 + (i * 296) / 11} y="130" fontSize="8" textAnchor="middle" fill="#8A93B2">{i + 1}</text>)}
+                <path d={plot(DASH.gold, 30, 296, 4, 110)} pathLength="1" fill="none" stroke="#E8A93A" strokeWidth="2" strokeLinejoin="round" style={drawIn(seen, 1800, 300)} />
+                <path d={plot(DASH.blue, 30, 296, 4, 110)} pathLength="1" fill="none" stroke="#3D4DF2" strokeWidth="2.2" strokeLinejoin="round" style={drawIn(seen, 1800)} />
+                <circle className="ping" cx="326" cy={4 + 110 - (237 / 250) * 110} r="3" fill="#3D4DF2" />
+                <circle cx="326" cy={4 + 110 - (237 / 250) * 110} r="3.5" fill="#3D4DF2" style={{ opacity: seen ? 1 : 0, transition: 'opacity .4s ease 1.8s' }} />
+              </svg>
+            </div>
+            <div className="col-span-2 rounded-lg border border-line p-2">
+              <p className="text-[11px] font-bold">User growth</p>
+              <div className="mt-2 flex h-24 items-end gap-1.5 border-b border-line">
+                {DASH.bars.map(([t, b], i) => {
+                  const last = i === 5, total = t + (last ? wobT : 0), blue = b + (last ? wobB : 0);
+                  return (
+                    <div key={i} className="flex h-full flex-1 flex-col justify-end">
+                      <div className="flex flex-col overflow-hidden rounded-t" style={{ height: seen ? (total / 250) * 100 + '%' : '3%', transition: 'height .9s ease ' + i * 80 + 'ms' }}>
+                        <div className="flex-1 bg-[#7B5CE6]" /><div className="bg-azure" style={{ height: (blue / total) * 100 + '%', transition: 'height .9s ease' }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-2 rounded-lg border border-line text-[11px]">
+            <p className="border-b border-line px-2 py-1.5 font-bold">Recent transactions</p>
+            <div className={'grid gap-1 bg-mist px-2 py-1 text-[10px] font-bold text-navy-900/75 ' + cols}><span>ID</span><span>Customer</span><span className="hidden sm:block">Plan</span><span>Amount</span><span>Status</span></div>
+            {rows.map(j => {
+              const [name, plan, amt, status] = DASH.sales[j % DASH.sales.length];
+              return (
+                <div key={j} className={'grid items-center gap-1 border-t border-line px-2 py-1.5 ' + cols + (j === k + 2 && tick ? ' swap' : '')}>
+                  <span>#TR-{1234 + j}</span><span className="truncate">{name}</span>
+                  <span className="hidden sm:block"><i className={'rounded px-1.5 py-0.5 text-[9px] font-bold not-italic ' + planTone[plan]}>{plan}</i></span>
+                  <span className="tabular-nums">${amt}.00</span>
+                  <span><i className={'rounded px-1.5 py-0.5 text-[9px] font-bold not-italic ' + (status === 'Paid' ? good : 'bg-amber-100 text-amber-700')}>{status}</i></span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------- Interactive demo dashboard (every number is made-up demo data) ----------
+const PERS = {
+  seed: { label: 'Seed · Product-led', raised: '$3.5M raised', s: 1, f: 0.45, win: 24.6, ltv: 3.2, nrr: 108, run: 19, mix: [18, 32, 36, 14], leads: 90, deal: 6 },
+  a: { label: 'Series A · B2B SaaS', raised: '$12M raised', s: 3, f: 1, win: 31.2, ltv: 5.1, nrr: 124, run: 22, mix: [40, 34, 15, 11], leads: 140, deal: 18 },
+  b: { label: 'Series B · Fintech scale-up', raised: '$35M raised', s: 6.5, f: 1.7, win: 28.4, ltv: 6.2, nrr: 119, run: 28, mix: [62, 24, 8, 6], leads: 150, deal: 42 },
+};
+const ACT = [0.32, 0.38, 0.45, 0.5, 0.61, 0.68, 0.8, 0.9, 1.02, 1.1, 1.18, 1.3];
+const FC = [1.42, 1.56, 1.7, 1.88];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
+const FUN = [396, 246, 152, 84, 46];
+const FUN_NAMES = ['Leads in', 'Qualified discovery', 'Product demo', 'Proposal and security review', 'Closed won'];
+const FUN_COLORS = ['#9AA6D6', '#3D4DF2', '#7B5CE6', '#E8A93A', '#3DDC97'];
+const STG = { names: ['Lead', 'Qualified', 'Demo', 'Proposal', 'Negotiation', 'Won'], tot: [120, 210, 240, 330, 450, 732], wtd: [12, 42, 72, 132, 248, 732], deals: [64, 38, 27, 18, 11, 6], days: [4, 9, 16, 28, 41, 52] };
+const CHN = [['Product-led', 1.1, 1.0, 4.8, '#E0457B'], ['Inbound', 0.5, 1.1, 6.2, '#3DDC97'], ['Outbound', 3.1, 6.2, 3.1, '#7B5CE6'], ['Partner', 1.0, 2.4, 5.4, '#E8A93A'], ['Paid', 0.9, 3.0, 2.4, '#2BB8C9']];
+const SEGS = [['Enterprise', '#3D4DF2'], ['Mid-market', '#7B5CE6'], ['SMB', '#3DDC97'], ['Startup', '#E8A93A']];
+const INSIGHTS = ['Proposals wait 28 days on average, the longest stage in your pipeline.', 'Product-led signups convert best and cost the least to win.', 'Raising win rate by three points adds the most ARR over 12 months.'];
+const money = v => '$' + v.toFixed(2) + 'M';
+const moneyK = v => (v >= 1000 ? '$' + (v / 1000).toFixed(2) + 'M' : '$' + Math.round(v) + 'k');
+
+// Smoothly animates a number from its current value to a new target
+function useTween(target, ms = 800) {
+  const [v, setV] = useState(0);
+  const from = useRef(0);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { from.current = target; setV(target); return; }
+    const start = from.current;
+    let raf, t0;
+    const step = t => {
+      t0 = t0 || t;
+      const p = Math.min((t - t0) / ms, 1);
+      from.current = start + (target - start) * (1 - Math.pow(1 - p, 3));
+      setV(from.current);
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target]);
+  return v;
+}
+// true shortly after mount, so bars and rings can animate from empty
+function useReady() {
+  const [r, setR] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setR(true), 40); return () => clearTimeout(t); }, []);
+  return r;
+}
+
+const Card = ({ title, tag, right, className = '', children }) => (
+  <div className={'min-w-0 rounded-xl border border-line bg-white p-4 ' + className}>
+    <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+      <p className="font-bold">{title}{tag && <span className="ml-2 rounded bg-azure/10 px-1.5 py-0.5 text-[10px] font-bold text-azure">{tag}</span>}</p>
+      {right && <span className="text-xs text-navy-900/75">{right}</span>}
+    </div>
+    {children}
+  </div>
+);
+
+function Kpi({ label, value, kind, delta, pct, color, seen }) {
+  const v = useTween(seen ? value : 0, 900);
+  const text = kind === 'm' ? money(v) : kind === 'x' ? v.toFixed(2) + 'x' : kind === 'mo' ? Math.round(v) + ' mo' : kind === 'p1' ? v.toFixed(1) + '%' : Math.round(v) + '%';
+  return (
+    <div className="rounded-xl border border-line border-t-2 bg-white p-3" style={{ borderTopColor: color }}>
+      <p className="min-h-[2.4em] text-[11px] leading-tight text-navy-900/75">{label}</p>
+      <p className="mt-1 text-xl font-extrabold tabular-nums">{text}</p>
+      <p className="mt-1 text-[11px] font-bold text-[#119a60]">▲ {delta} <span className="font-medium text-navy-900/65">vs last period</span></p>
+      <div className="mt-2 h-1.5 rounded-full bg-mist"><div className="h-1.5 rounded-full" style={{ width: seen ? pct + '%' : '0%', background: color, transition: 'width 1s ease' }} /></div>
+    </div>
+  );
+}
+
+function RevenueChart({ p }) {
+  const [hov, setHov] = useState(null);
+  const act = ACT.map(v => v * p.s), fc = FC.map(v => v * p.s), all = [...act, ...fc];
+  const max = Math.ceil(Math.max(...all) * 1.1 * 2) / 2;
+  const W = 600, H = 190, x0 = 56, n = all.length, step = (W - x0 - 8) / (n - 1);
+  const X = i => x0 + i * step, Y = v => 8 + H - (v / max) * H;
+  const path = (arr, off) => arr.map((v, i) => (i ? 'L' : 'M') + X(i + off).toFixed(1) + ' ' + Y(v).toFixed(1)).join(' ');
+  const area = path(act, 0) + ' L' + X(11) + ' ' + (8 + H) + ' L' + X(0) + ' ' + (8 + H) + ' Z';
+  const move = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    setHov(Math.max(0, Math.min(n - 1, Math.round((((e.clientX - r.left) / r.width) * W - x0) / step))));
+  };
+  return (
+    <Card title="Revenue growth and forecast" tag="Live trajectory" right={hov === null ? 'Hover to inspect' : MONTHS[hov] + ': ' + money(all[hov]) + (hov > 11 ? ' (forecast)' : '')}>
+      <svg viewBox={'0 0 ' + W + ' 236'} className="w-full touch-pan-y" onPointerMove={move} onPointerLeave={() => setHov(null)} role="img" aria-label="Revenue rising over twelve months with a four month forecast">
+        <defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#3D4DF2" stopOpacity=".22" /><stop offset="1" stopColor="#3D4DF2" stopOpacity="0" /></linearGradient></defs>
+        {[0, 1, 2, 3, 4].map(k => { const v = (max * k) / 4, y = Y(v); return <g key={k}><line x1={x0} x2={W - 8} y1={y} y2={y} stroke="#E1E7F5" strokeDasharray="3 4" /><text x="0" y={y + 5} fontSize="15" fill="#6B7699">{'$' + v.toFixed(1) + 'M'}</text></g>; })}
+        {MONTHS.map((m, i) => (i % 2 === 0 ? <text key={i} x={X(i)} y="230" fontSize="14" textAnchor="middle" fill={i > 11 ? '#3D4DF2' : '#6B7699'}>{m}</text> : null))}
+        <path d={area} fill="url(#rg)" className="fadein" />
+        <path d={path(act, 0)} pathLength="1" fill="none" stroke="#3D4DF2" strokeWidth="2.6" strokeLinejoin="round" className="drawin" />
+        <path d={path([act[11], ...fc], 11)} fill="none" stroke="#7B5CE6" strokeWidth="2.4" strokeDasharray="6 5" className="fadein" />
+        {hov !== null && <g><line x1={X(hov)} x2={X(hov)} y1="8" y2={8 + H} stroke="#141A3D" strokeOpacity=".25" /><circle cx={X(hov)} cy={Y(all[hov])} r="5" fill="#fff" stroke={hov > 11 ? '#7B5CE6' : '#3D4DF2'} strokeWidth="3" /></g>}
+      </svg>
+    </Card>
+  );
+}
+
+function Funnel({ p }) {
+  const ready = useReady(); // each panel animates in from empty when it appears
+  const c = FUN.map(n => Math.round(n * p.f));
+  return (
+    <Card title="Conversion funnel" tag="End to end">
+      <div className="space-y-3">
+        {c.map((n, i) => (
+          <div key={i}>
+            <div className="flex justify-between gap-2 text-xs"><span className="truncate font-semibold">{FUN_NAMES[i]}</span><span className="tabular-nums text-navy-900/75">{n} deals</span></div>
+            <div className="mt-1 h-3 rounded-full bg-mist"><div className="h-3 rounded-full" style={{ width: ready ? (n / c[0]) * 100 + '%' : '0%', background: FUN_COLORS[i], transition: 'width 1s ease ' + i * 90 + 'ms' }} /></div>
+            {i > 0 && <p className="mt-0.5 text-[10px] text-red-600/80">▼ {Math.round(100 - (n / c[i - 1]) * 100)}% drop-off</p>}
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+function StageChart({ p }) {
+  const ready = useReady(); // each panel animates in from empty when it appears
+  const [h, setH] = useState(5);
+  const tot = STG.tot.map(v => v * p.s), wtd = STG.wtd.map(v => v * p.s), max = Math.max(...tot);
+  return (
+    <Card title="Stage velocity and pipeline weight" tag="Deal stages" right="Tap or hover a stage">
+      <div className="relative">
+        <div className="flex h-52 items-end gap-2 border-b border-line">
+          {STG.names.map((nm, i) => (
+            <button key={nm} onMouseEnter={() => setH(i)} onFocus={() => setH(i)} onClick={() => setH(i)} aria-label={nm + ' stage'} className={'flex h-full flex-1 items-end justify-center gap-1 rounded-t px-0.5 ' + (h === i ? 'bg-mist' : '')}>
+              <i className="w-1/2 rounded-t bg-[#8E86E8]" style={{ height: ready ? (tot[i] / max) * 92 + '%' : '2%', transition: 'height .9s ease ' + i * 70 + 'ms' }} />
+              <i className="w-1/2 rounded-t bg-mint" style={{ height: ready ? (wtd[i] / max) * 92 + '%' : '2%', transition: 'height .9s ease ' + i * 70 + 'ms' }} />
+            </button>
+          ))}
+        </div>
+        <div className="mt-1 flex gap-2">{STG.names.map(nm => <span key={nm} className="flex-1 truncate text-center text-[10px] text-navy-900/75">{nm}</span>)}</div>
+        <div className="pointer-events-none absolute top-0 w-40 rounded-lg bg-navy-900 p-3 text-[11px] leading-relaxed text-white shadow-xl transition-all duration-300" style={{ left: 'clamp(0px, calc(' + ((h + 0.5) / 6) * 100 + '% - 5rem), calc(100% - 10rem))' }}>
+          <b className="block text-xs">Stage: {STG.names[h]}</b>
+          <span className="flex justify-between"><span className="text-white/75">Total pipeline</span>{moneyK(tot[h])}</span>
+          <span className="flex justify-between"><span className="text-white/75">Weighted</span><span className="text-mint">{moneyK(wtd[h])}</span></span>
+          <span className="flex justify-between"><span className="text-white/75">Deals</span>{Math.round(STG.deals[h] * p.f)}</span>
+          <span className="flex justify-between"><span className="text-white/75">Avg velocity</span><span className="text-amber-300">{STG.days[h]} days</span></span>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function Donut({ p, seen }) {
+  const ready = useReady(); // each panel animates in from empty when it appears
+  const arr = useTween(seen ? ACT[11] * p.s : 0, 900);
+  let acc = 0;
+  return (
+    <Card title="Revenue by segment" tag="ACV mix">
+      <div className="relative mx-auto h-40 w-40">
+        <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90" role="img" aria-label="Revenue split by customer segment">
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#F4F7FD" strokeWidth="13" />
+          {p.mix.map((m, i) => { const off = -acc; acc += m; return <circle key={i} cx="50" cy="50" r="38" fill="none" stroke={SEGS[i][1]} strokeWidth="13" pathLength="100" strokeDasharray={ready ? Math.max(m - 1, 0) + ' ' + (101 - m) : '0 100'} strokeDashoffset={off} style={{ transition: 'stroke-dasharray 1s ease ' + i * 120 + 'ms' }} />; })}
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center"><span className="text-[10px] text-navy-900/75">Total ARR</span><b className="text-lg tabular-nums">{money(arr)}</b></div>
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+        {SEGS.map(([nm, col], i) => <div key={nm} className="rounded-lg bg-mist p-2"><span className="flex items-center gap-1.5 font-semibold"><i className="h-2 w-2 rounded-full" style={{ background: col }} />{nm}</span><span className="tabular-nums text-navy-900/75">{p.mix[i]}% · {money((ACT[11] * p.s * p.mix[i]) / 100)}</span></div>)}
+      </div>
+    </Card>
+  );
+}
+
+function ChannelChart({ p }) {
+  const ready = useReady(); // each panel animates in from empty when it appears
+  const [h, setH] = useState(2);
+  const max = Math.max(...CHN.map(c => c[1] * p.s));
+  const c = CHN[h];
+  return (
+    <Card title="Channel attribution and unit ROI" tag="CAC vs LTV" right="Revenue by acquisition channel" className="lg:col-span-2">
+      <div className="flex h-52 items-end gap-3 border-b border-line">
+        {CHN.map(([nm, rev, , , col], i) => (
+          <button key={nm} onMouseEnter={() => setH(i)} onFocus={() => setH(i)} onClick={() => setH(i)} aria-label={nm} className="flex h-full flex-1 flex-col items-center justify-end gap-1">
+            <span className="text-[10px] font-bold tabular-nums text-navy-900/85">{money(rev * p.s)}</span>
+            <i className="w-full rounded-t" style={{ height: ready ? ((rev * p.s) / max) * 82 + '%' : '2%', background: col, opacity: h === i ? 1 : 0.55, transition: 'height .9s ease ' + i * 80 + 'ms, opacity .2s' }} />
+          </button>
+        ))}
+      </div>
+      <div className="mt-1 flex gap-3">{CHN.map(x => <span key={x[0]} className="flex-1 truncate text-center text-[10px] text-navy-900/75">{x[0]}</span>)}</div>
+      <div className="mt-4 grid gap-2 text-xs sm:grid-cols-3">
+        {[['Channel', c[0]], ['Cost to win a customer', '$' + c[2].toFixed(1) + 'k'], ['LTV to CAC ratio', c[3].toFixed(1) + 'x']].map(([l, v]) => <div key={l} className="rounded-lg bg-mist p-3"><span className="text-navy-900/75">{l}</span><b className="block text-sm">{v}</b></div>)}
+      </div>
+    </Card>
+  );
+}
+
+function Simulator({ p, seen }) {
+  const [leads, setLeads] = useState(p.leads), [win, setWin] = useState(p.win), [deal, setDeal] = useState(p.deal);
+  const cur = ACT[11] * p.s;
+  const monthly = (leads * 0.3 * (win / 100) * deal) / 1000;
+  const proj = cur * (p.nrr / 100) + monthly * 12;
+  const shown = useTween(proj, 600);
+  const preset = (m, w) => { setLeads(Math.round(p.leads * m)); setWin(Math.round((p.win + w) * 10) / 10); setDeal(p.deal); };
+  const rows = [['Monthly leads', leads, setLeads, 20, 400, 5, leads + ' leads'], ['Win rate', win, setWin, 5, 50, 0.5, win.toFixed(1) + '%'], ['Average deal size', deal, setDeal, 2, 100, 1, '$' + deal + 'k']];
+  return (
+    <div className="grid gap-4 lg:grid-cols-5">
+      <Card title="Growth levers" tag="Live modelling" className="lg:col-span-3">
+        <div className="mb-4 flex flex-wrap gap-2">
+          {[['Conservative', 0.6, -3], ['Balanced', 1, 0], ['Aggressive', 1.8, 4]].map(([nm, m, w]) => <button key={nm} onClick={() => preset(m, w)} className="rounded-full border border-line px-3 py-1.5 text-xs font-bold transition hover:border-azure hover:text-azure">{nm}</button>)}
+        </div>
+        <div className="space-y-5">
+          {rows.map(([lab, val, set, min, mx, st, out]) => (
+            <label key={lab} className="block">
+              <span className="flex justify-between text-sm"><span className="font-semibold">{lab}</span><b className="tabular-nums text-azure">{out}</b></span>
+              <input type="range" min={min} max={mx} step={st} value={val} onChange={e => set(Number(e.target.value))} className="mt-2 w-full accent-azure" />
+            </label>
+          ))}
+        </div>
+      </Card>
+      <div className="rounded-xl bg-gradient-to-br from-[#2B3680] to-navy-900 p-5 text-white lg:col-span-2">
+        <p className="text-xs font-bold text-white/85">Projected 12 month ARR</p>
+        <p className="mt-1 text-4xl font-extrabold tabular-nums">{money(shown)}</p>
+        <p className="mt-1 text-sm font-bold text-mint">▲ {Math.round((proj / cur - 1) * 100)}% growth vs current ARR</p>
+        <div className="mt-5 flex h-24 items-end gap-1">
+          {Array.from({ length: 12 }, (_, m) => <i key={m} className="flex-1 rounded-t bg-white/80" style={{ height: seen ? ((cur + ((proj - cur) * (m + 1)) / 12) / proj) * 100 + '%' : '4%', transition: 'height .5s ease' }} />)}
+        </div>
+        <p className="mt-3 text-xs text-white/75">Current ARR {money(cur)} · retention adds {money((cur * (p.nrr - 100)) / 100)}</p>
+      </div>
+    </div>
+  );
+}
+
+function Demo() {
+  const [ref, seen] = useInView();
+  const [pid, setPid] = useState('a');
+  const [tab, setTab] = useState('overview');
+  const [tip, setTip] = useState(0);
+  const [live, setLive] = useState(0); // KPI numbers creep up every 1.8s
+  const ready = useReady();
+  const p = PERS[pid], arr = ACT[11] * p.s;
+  useEffect(() => {
+    if (!seen || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = setInterval(() => setTip(n => (n + 1) % INSIGHTS.length), 4500);
+    const t2 = setInterval(() => setLive(n => n + 1), 1800);
+    return () => { clearInterval(t); clearInterval(t2); };
+  }, [seen]);
+  const kpis = [
+    ['Annual recurring revenue', arr + live * 0.01 * p.s, 'm', '18.4%', 66, '#16B67A'], ['Weighted pipeline', 0.42 * p.s + live * 0.012 * p.s, 'm', '14.2%', 70, '#7B5CE6'],
+    ['Win rate', p.win + Math.sin(live * 1.1) * 0.4, 'p1', '3.4%', (p.win / 40) * 100, '#2B8CF0'], ['LTV to CAC', p.ltv + Math.cos(live * 0.9) * 0.08, 'x', '5.4%', (p.ltv / 8) * 100, '#16B67A'],
+    ['Net revenue retention', p.nrr + Math.sin(live * 0.7) * 1.5, 'p0', '4.8%', ((p.nrr - 80) / 60) * 100, '#E0457B'], ['Runway', p.run, 'mo', '1.8%', (p.run / 36) * 100, '#E8A93A'],
+  ];
+  const tabs = [['overview', 'Executive overview'], ['pipeline', 'Pipeline and velocity'], ['economics', 'Unit economics'], ['saas', 'SaaS metrics'], ['sim', 'Growth simulator']];
+  return (
+    <section className="bg-navy-900 py-20 text-white">
+      <div className="mx-auto max-w-6xl px-5">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-extrabold sm:text-4xl">Try the dashboard yourself</h2>
+          <p className="mt-3 text-white/85">Switch the company stage, open the tabs and drag the sliders. Everything you see here is demo data.</p>
+        </Reveal>
+        <div ref={ref} className="mt-10 overflow-hidden rounded-2xl bg-mist text-navy-900 shadow-2xl shadow-black/30 ring-1 ring-white/10">
+          <div className="flex flex-wrap items-center gap-3 border-b border-line bg-white px-4 py-3">
+            <svg viewBox="0 0 32 32" className="h-7 w-7" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#3D4DF2" /><path d="M9 23V9l14 14V9" stroke="#fff" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <div className="mr-auto leading-tight"><b>Nexora <i className="rounded bg-azure/10 px-1.5 py-0.5 text-[10px] not-italic text-azure">PRO</i></b><p className="text-[11px] text-navy-900/75">Revenue intelligence</p></div>
+            <label className="flex items-center gap-2 text-sm"><span className="sr-only sm:not-sr-only text-navy-900/75">Company stage</span>
+              <select value={pid} onChange={e => setPid(e.target.value)} className="rounded-lg border border-line bg-white px-3 py-2 text-sm font-semibold focus:border-azure focus:outline-none">
+                {Object.entries(PERS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+              </select>
+            </label>
+            <span className="hidden rounded-full bg-mist px-3 py-1.5 text-xs font-bold sm:block">{p.raised}</span>
+          </div>
+          <div className="space-y-4 p-4">
+            <div key={tip} className="swap flex items-center gap-3 rounded-xl border border-line bg-white px-4 py-3 text-sm">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700"><Icon d="M9 18h6M10 21h4M12 3a6 6 0 00-4 10.500c.7.700 1 1.500 1 2.500h6c0-1 .3-1.800 1-2.500A6 6 0 0012 3z" className="h-4 w-4" /></span>
+              <p><b>Insight:</b> {INSIGHTS[tip]}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+              {kpis.map(([label, value, kind, delta, pct, color]) => <Kpi key={label} label={label} value={value} kind={kind} delta={delta} pct={Math.min(pct, 100)} color={color} seen={seen} />)}
+            </div>
+            <div role="tablist" aria-label="Dashboard views" className="flex gap-2 overflow-x-auto pb-1">
+              {tabs.map(([id, label]) => <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)} className={'shrink-0 rounded-lg px-4 py-2 text-sm font-bold transition ' + (tab === id ? 'bg-azure text-white' : 'bg-white text-navy-900/85 hover:text-azure')}>{label}</button>)}
+            </div>
+            <div key={tab} className="swap">
+              {tab === 'overview' && <div className="grid gap-4 lg:grid-cols-5"><div className="min-w-0 lg:col-span-3"><RevenueChart key={pid} p={p} /></div><div className="lg:col-span-2"><Funnel p={p} ready={ready} /></div></div>}
+              {tab === 'pipeline' && <div className="grid gap-4 lg:grid-cols-5"><div className="min-w-0 lg:col-span-3"><StageChart p={p} ready={ready} /></div><div className="lg:col-span-2"><Donut p={p} ready={ready} seen={seen} /></div></div>}
+              {tab === 'economics' && <div className="grid gap-4 lg:grid-cols-3"><ChannelChart p={p} ready={ready} /><Funnel p={p} ready={ready} /></div>}
+              {tab === 'saas' && <SaasPanel key={pid} p={p} />}
+              {tab === 'sim' && <Simulator key={pid} p={p} seen={seen} />}
+            </div>
+          </div>
+          <p className="border-t border-line bg-white px-4 py-3 text-xs text-navy-900/65">Nexora demo · sample data for illustration only</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Live numbers: they tick up on their own so the movement is easy to see (DEMO numbers) ----------
+function useLive(base, min, max, ms) {
+  const [v, setV] = useState(base);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = setInterval(() => setV(x => x + min + Math.floor(Math.random() * (max - min + 1))), ms);
+    return () => clearInterval(t);
+  }, []);
+  return useTween(v, Math.min(ms, 900));
+}
+const LiveDot = () => <i className="relative inline-block h-2 w-2 shrink-0 rounded-full bg-mint"><i className="ping absolute inset-0 rounded-full bg-mint" /></i>;
+const num = v => Math.round(v).toLocaleString('en-US');
+
+// Three live cards in a row under the hero photo (nothing covers the people)
+function HeroLive() {
+  const rev = useLive(48210, 18, 64, 1100);
+  const deals = useLive(126, 1, 1, 2400);
+  const online = useLive(1284, -3, 6, 1500);
+  return (
+    <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div className="col-span-2 rounded-xl bg-white p-4 text-navy-900 shadow-xl sm:col-span-1">
+        <p className="flex items-center gap-2 text-xs font-semibold text-navy-900/75"><LiveDot />Revenue today</p>
+        <p className="mt-1 text-3xl font-extrabold tabular-nums sm:text-2xl">${num(rev)}</p>
+        <p className="text-xs font-bold text-[#119a60]">▲ 18% vs yesterday</p>
+      </div>
+      <div className="rounded-xl bg-white p-4 text-navy-900 shadow-xl">
+        <p className="flex items-center gap-2 text-xs font-semibold text-navy-900/75"><LiveDot />Deals closed</p>
+        <p className="mt-1 text-3xl font-extrabold tabular-nums sm:text-2xl">{num(deals)}</p>
+      </div>
+      <div className="rounded-xl bg-white/10 p-4 text-white ring-1 ring-white/20">
+        <p className="flex items-center gap-2 text-xs font-semibold text-white/85"><LiveDot />Teams online</p>
+        <p className="mt-1 text-3xl font-extrabold tabular-nums sm:text-2xl">{num(online)}</p>
+      </div>
+    </div>
+  );
+}
+
+// A band of big counters under the hero
+function LiveStats() {
+  const deals = useLive(2418, 1, 2, 1700);
+  const paid = useLive(9806, 1, 4, 1200);
+  const tracked = useLive(4821, 1, 4, 1300);
+  const teams = useLive(3126, -4, 7, 1500);
+  const items = [[num(deals), 'Deals closed today'], [num(paid), 'Invoices paid today'], ['$' + (tracked / 100).toFixed(2) + 'M', 'Revenue tracked this month'], [num(teams), 'Teams working right now']];
+  return (
+    <section className="bg-white pb-6 pt-16" aria-label="Live activity">
+      <div className="mx-auto max-w-6xl px-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map(([n, label], i) => (
+            <Reveal key={label} delay={i * 100}>
+              <div className="rounded-2xl border border-line bg-mist p-6 text-center">
+                <p className="text-4xl font-extrabold tabular-nums text-navy-900 sm:text-5xl">{n}</p>
+                <p className="mt-2 flex items-center justify-center gap-2 text-sm font-semibold text-navy-900/80"><LiveDot />{label}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <p className="mt-4 text-center text-xs text-navy-900/75">Sample numbers for demonstration</p>
+      </div>
+    </section>
+  );
+}
+
+// Live customer inbox: counters tick and new messages slide in (DEMO messages)
+const INBOX = [
+  ['Maya R.', 'Can you resend the March invoice?', 'Billing', '#3D4DF2'],
+  ['Luis M.', 'Renewal quote looks great. Sending the PO today.', 'Sales', '#7B5CE6'],
+  ['Noor A.', 'Our integration is syncing again, thank you!', 'Support', '#16B67A'],
+  ['Ben K.', 'Is annual billing available for 40 seats?', 'Sales', '#E8A93A'],
+  ['Zara T.', 'Please add Finance to the deal room.', 'Support', '#E0457B'],
+  ['Omar H.', 'Payment received. Could we get a receipt?', 'Billing', '#2BB8C9'],
+];
+function SupportDesk() {
+  const [ref, seen] = useInView();
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    if (!seen || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = setInterval(() => setTick(n => n + 1), 2200);
+    return () => clearInterval(t);
+  }, [seen]);
+  const replies = useLive(1284, 1, 3, 1400);
+  const csat = useLive(9640, 1, 2, 2600);
+  const first = Math.round(useTween(seen ? Math.round(252 + Math.sin(tick * 1.4) * 34) : 0, 700));
+  const tiles = [[num(replies), 'Replies today'], [Math.floor(first / 60) + 'm ' + String(first % 60).padStart(2, '0') + 's', 'First response'], [(Math.min(csat, 9985) / 100).toFixed(2) + '%', 'Satisfaction']];
+  const when = ['just now', '2 min ago', '5 min ago', '9 min ago'];
+  return (
+    <div ref={ref} className="overflow-hidden rounded-2xl border-4 border-azure bg-white shadow-xl shadow-azure/25">
+      <div className="flex items-center justify-between border-b border-line px-4 py-3">
+        <b>Customer inbox</b>
+        <span className="flex items-center gap-1.5 rounded-full bg-mist px-2 py-1 text-[10px] font-bold"><LiveDot />Live</span>
+      </div>
+      <div className="grid grid-cols-3 gap-2 p-3">
+        {tiles.map(([n, l]) => <div key={l} className="rounded-lg bg-mist p-3 text-center"><p className="text-xl font-extrabold tabular-nums sm:text-2xl">{n}</p><p className="mt-0.5 text-[11px] text-navy-900/75">{l}</p></div>)}
+      </div>
+      {[tick + 3, tick + 2, tick + 1, tick].map((j, i) => {
+        const [name, text, tag, color] = INBOX[j % INBOX.length];
+        return (
+          <div key={j} className={'flex items-center gap-3 border-t border-line px-4 py-2.5 ' + (i === 0 && tick ? 'swap' : '')}>
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ background: color }}>{name[0]}</span>
+            <div className="min-w-0 flex-1"><p className="truncate text-sm font-bold">{name}</p><p className="truncate text-xs text-navy-900/75">{text}</p></div>
+            <div className="shrink-0 text-right"><i className="rounded bg-mist px-1.5 py-0.5 text-[10px] font-bold not-italic">{tag}</i><p className="mt-1 text-[10px] text-navy-900/75">{when[i]}</p></div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ---------- Extras that help real visitors decide: steps, FAQ, final call to action, sticky bar, chat button ----------
+const STEPS = [
+  { icon: 'M10 14a4 4 0 005.700 0l3-3a4 4 0 00-5.700-5.700l-1 1M14 10a4 4 0 00-5.700 0l-3 3a4 4 0 005.700 5.700l1-1', title: 'Connect your tools', text: 'Link your email, calendar and billing in a few minutes. Nexora reads what you already have.' },
+  { icon: 'M12 3v12M7 10l5 5 5-5M4 21h16', title: 'Import your pipeline', text: 'Bring in deals and customers from a spreadsheet or your current CRM. Duplicates are flagged for you.' },
+  { icon: 'M5 12.500l4.500 4.500L19 7', title: 'Close with confidence', text: 'Track deals, send invoices and share live forecasts from one calm workspace.' },
+];
+// DEMO answers: check every claim is true for your real product before launch
+const FAQS = [
+  ['How long does setup take?', 'Most teams are live within an afternoon. Connect your email and billing, import your deals, and invite your team.'],
+  ['Can I import data from a spreadsheet or another CRM?', 'Yes. Upload a CSV or connect your current tool. Nexora maps the columns and flags duplicates before anything is imported.'],
+  ['Is there a free trial?', 'Every plan starts with a 14-day free trial. No credit card is needed.'],
+  ['Can I change or cancel my plan?', 'Yes, at any time from your account settings. Changes apply from the next billing cycle.'],
+  ['How is my data protected?', 'Data is encrypted in transit and at rest. The Scale plan adds single sign-on and a full audit log.'],
+  ['When can I reach support?', 'Our team replies Monday to Friday, 8am to 6pm. Growth and Scale plans get priority replies.'],
+];
+
+function HowItWorks() {
+  return (
+    <section id="how" className="bg-white py-20">
+      <div className="mx-auto max-w-6xl px-5">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-extrabold sm:text-4xl">Up and running in one afternoon</h2>
+          <p className="mt-3 text-navy-900/85">Three simple steps, and nobody has to learn a new process.</p>
+        </Reveal>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {STEPS.map((s, i) => (
+            <Reveal key={s.title} delay={i * 130} className="h-full">
+              <div className="h-full rounded-2xl border border-line bg-mist p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-navy-900/10">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-azure text-white"><Icon d={s.icon} className="h-6 w-6" /></span>
+                <h3 className="mt-5 text-lg font-extrabold">{s.title}</h3>
+                <p className="mt-2 leading-relaxed text-navy-900/85">{s.text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Faq() {
+  const [open, setOpen] = useState(0); // which answer is showing (-1 means none)
+  return (
+    <section id="faq" className="bg-white py-20">
+      <div className="mx-auto max-w-3xl px-5">
+        <Reveal className="text-center">
+          <h2 className="text-3xl font-extrabold sm:text-4xl">Questions, answered</h2>
+          <p className="mt-3 text-navy-900/85">Still unsure? Send us a message below and we will reply within one business day.</p>
+        </Reveal>
+        <div className="mt-10 space-y-3">
+          {FAQS.map(([q, a], i) => (
+            <div key={q} className={'rounded-xl border bg-white transition ' + (open === i ? 'border-azure shadow-lg shadow-azure/10' : 'border-line')}>
+              <button onClick={() => setOpen(open === i ? -1 : i)} aria-expanded={open === i} aria-controls={'faq-' + i} className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-bold">
+                {q}
+                <span className={'flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition duration-300 ' + (open === i ? 'rotate-45 bg-azure text-white' : 'bg-mist text-azure')}><Icon d="M12 5v14M5 12h14" className="h-4 w-4" /></span>
+              </button>
+              <div id={'faq-' + i} className={'grid transition-all duration-300 ' + (open === i ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]')}>
+                <div className="overflow-hidden"><p className="px-5 pb-5 leading-relaxed text-navy-900/80">{a}</p></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalCta() {
+  return (
+    <section className="bg-white pb-8 pt-4">
+      <div className="mx-auto max-w-6xl px-5">
+        <Reveal>
+          <div className="rounded-3xl bg-azure px-6 py-14 text-center text-white shadow-xl shadow-azure/25 sm:px-12">
+            <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-tight sm:text-4xl">Ready to close more deals with less chasing?</h2>
+            <p className="mx-auto mt-4 max-w-xl text-white/90">Start your 14-day free trial today. No credit card, no setup call, cancel whenever you like.</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <a href="#pricing" className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 text-sm font-bold text-azure transition hover:bg-mist">Start a free trial</a>
+              <a href="#contact" className="inline-flex items-center justify-center rounded-lg border border-white/60 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">Book a demo</a>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+// A slim menu bar that slides down once you scroll past the hero, so the menu is always one tap away
+function StickyBar() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const on = () => setShow(window.scrollY > 560);
+    on();
+    window.addEventListener('scroll', on, { passive: true });
+    return () => window.removeEventListener('scroll', on);
+  }, []);
+  return (
+    <div className={'fixed inset-x-0 top-0 z-40 border-b border-line bg-white/95 backdrop-blur transition-transform duration-300 ' + (show ? 'translate-y-0' : 'invisible -translate-y-full')} style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
+        <a href="#top" className="flex items-center gap-2 text-lg font-extrabold text-navy-900">
+          <svg viewBox="0 0 32 32" className="h-6 w-6" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#3D4DF2" /><path d="M9 23V9l14 14V9" stroke="#fff" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          Nexora
+        </a>
+        <nav className="hidden items-center gap-6 text-sm font-semibold text-navy-900/80 lg:flex" aria-label="Sticky">
+          {navLinks.map(([l, hr]) => <a key={hr} href={hr} className="transition hover:text-azure">{l}</a>)}
+        </nav>
+        <a href="#pricing" className={btn + ' !px-4 !py-2'}>Start free trial</a>
+      </div>
+    </div>
+  );
+}
+
+// Floating chat button. Put your WhatsApp number below (country code + number, no plus or spaces, e.g. '923001234567').
+// If it stays empty, the button simply scrolls to the contact form.
+const WHATSAPP_NUMBER = '';
+function ChatButton() {
+  const wa = WHATSAPP_NUMBER !== '';
+  const href = wa ? 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent('Hi Nexora, I would like to know more.') : '#contact';
+  return (
+    <a href={href} target={wa ? '_blank' : undefined} rel={wa ? 'noopener noreferrer' : undefined} aria-label={wa ? 'Chat on WhatsApp' : 'Contact us'}
+      className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-azure p-3.5 text-sm font-bold text-white shadow-xl shadow-azure/30 transition hover:-translate-y-0.5 hover:bg-[#2c3bd6] sm:px-5 sm:py-3"
+      style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <Icon d="M4 5h16v11H8l-4 4z" className="h-5 w-5" /><span className="hidden sm:inline">{wa ? 'Chat on WhatsApp' : 'Chat with us'}</span>
+    </a>
+  );
+}
+
+// ---------- SaaS metrics tab + automation builder + lazy loader (all demo data) ----------
+const SAAS_MONTHS = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+const SAAS_FUNNEL = [['Prospecting', 480, 1150, '#3A8FD9'], ['Qualification', 300, 800, '#3D9BE9'], ['Proposal', 120, 350, '#5BB5EC'], ['Negotiation', 45, 150, '#2BB8C9'], ['Closed won', 25, 100, '#16B67A']];
+const ACTIVE = [820, 880, 950, 1010, 1090, 1180, 1260, 1340, 1420, 1500, 1580, 1660];
+const CHURNED = [140, 150, 165, 170, 185, 200, 215, 225, 240, 255, 265, 280];
+
+// Renders its children only when they are close to the screen, so phones load the top of the page first
+function Lazy({ id, minH = 600, children }) {
+  const ref = useRef(null);
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) { setOn(true); return; }
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { rootMargin: '700px' });
+    io.observe(ref.current);
+    const fallback = setTimeout(() => setOn(true), 3500);
+    return () => { io.disconnect(); clearTimeout(fallback); };
+  }, []);
+  return <div id={id} ref={ref} style={on ? undefined : { minHeight: minH }}>{on ? children : null}</div>;
+}
+
+function MrrChart({ p }) {
+  const ready = useReady();
+  const mrr = ACT.map(v => (v * p.s * 1000) / 12);
+  const max = Math.ceil((Math.max(...mrr) * 1.1) / 50) * 50;
+  const W = 600, x0 = 48, top = 10, H = 200, band = (W - x0 - 6) / 12;
+  const X = i => x0 + band * (i + 0.5), Y = v => top + H - (v / max) * H;
+  const line = mrr.map((v, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1)).join(' ');
+  return (
+    <Card title="Monthly recurring revenue growth" tag="Last 12 months" right={'Current MRR $' + Math.round(mrr[11] * 1000).toLocaleString('en-US')}>
+      <svg viewBox="0 0 600 250" className="w-full" role="img" aria-label="Monthly recurring revenue rising over twelve months">
+        {[0, 1, 2, 3, 4].map(k => { const v = (max * k) / 4; return <g key={k}><line x1={x0} x2={W - 6} y1={Y(v)} y2={Y(v)} stroke="#E1E7F5" strokeDasharray="3 4" /><text x="0" y={Y(v) + 5} fontSize="14" fill="#6B7699">{'$' + Math.round(v) + 'k'}</text></g>; })}
+        {mrr.map((v, i) => {
+          const b = v * 0.7, u = v * 0.24, w = band * 0.6, x = X(i) - w / 2;
+          return (
+            <g key={i} style={{ transformBox: 'fill-box', transformOrigin: 'bottom', transform: ready ? 'scaleY(1)' : 'scaleY(0)', transition: 'transform .9s ease ' + i * 60 + 'ms' }}>
+              <rect x={x} y={Y(b)} width={w} height={Y(0) - Y(b)} fill="#7DD3F5" />
+              <rect x={x} y={Y(b + u)} width={w} height={Y(b) - Y(b + u)} fill="#3D9BE9" />
+              <rect x={x} y={Y(v)} width={w} height={Y(b + u) - Y(v)} fill="#F2A33A" />
+            </g>
+          );
+        })}
+        <path d={line} pathLength="1" fill="none" stroke="#0F2A5C" strokeWidth="2.5" strokeLinejoin="round" className="drawin" />
+        {mrr.map((v, i) => <circle key={i} cx={X(i)} cy={Y(v)} r="4.5" fill="#fff" stroke="#0F2A5C" strokeWidth="2.5" className="fadein" />)}
+        {SAAS_MONTHS.map((m, i) => <text key={m + i} x={X(i)} y="244" fontSize="13" textAnchor="middle" fill="#6B7699">{m}</text>)}
+      </svg>
+      <div className="mt-2 flex flex-wrap gap-4 text-xs text-navy-900/75">
+        {[['Net new MRR', '#7DD3F5'], ['Upgrades', '#3D9BE9'], ['Churn', '#F2A33A']].map(([l, c]) => <span key={l} className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-sm" style={{ background: c }} />{l}</span>)}
+      </div>
+    </Card>
+  );
+}
+
+function FunnelRow({ name, deals, value, col, width, ready, i }) {
+  const d = useTween(ready ? deals : 0, 900 + i * 100), v = useTween(ready ? value : 0, 900 + i * 100);
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex-1"><div className="mx-auto flex h-10 min-w-[88px] items-center justify-center rounded-md text-xs font-bold text-white" style={{ width: ready ? width + '%' : '0%', background: col, transition: 'width 1s ease ' + i * 90 + 'ms' }}><span className="truncate px-1">{name}</span></div></div>
+      <div className="w-24 text-right text-xs leading-tight"><b className="text-sm tabular-nums">{num(d)}</b> <span className="text-navy-900/75">deals</span><br /><b className="tabular-nums">{moneyK(v)}</b></div>
+    </div>
+  );
+}
+function PipelineFunnel({ p }) {
+  const ready = useReady();
+  const rows = SAAS_FUNNEL.map(([name, d, v, col]) => [name, Math.round(d * p.f), v * (p.s / 3), col]);
+  return (
+    <Card title="Sales pipeline funnel" tag="Live deals">
+      <div className="space-y-2">{rows.map(([name, d, v, col], i) => <FunnelRow key={name} name={name} deals={d} value={v} col={col} width={100 - i * 17} ready={ready} i={i} />)}</div>
+      <p className="mt-3 text-xs text-navy-900/75">Win rate from proposal: <b>{((rows[4][1] / rows[2][1]) * 100).toFixed(1)}%</b></p>
+    </Card>
+  );
+}
+
+function CustomerArea({ p }) {
+  const ready = useReady();
+  const a = ACTIVE.map(v => v * p.f), c = CHURNED.map(v => v * p.f), tot = a.map((v, i) => v + c[i]);
+  const max = Math.max(400, Math.ceil(Math.max(...tot) / 400) * 400);
+  const W = 600, x0 = 52, top = 8, H = 170, step = (W - x0 - 6) / 11;
+  const X = i => x0 + step * i, Y = v => top + H - (v / max) * H;
+  const pts = arr => arr.map((v, i) => X(i).toFixed(1) + ' ' + Y(v).toFixed(1));
+  const churnArea = 'M' + pts(c).join('L') + 'L' + X(11) + ' ' + Y(0) + 'L' + X(0) + ' ' + Y(0) + 'Z';
+  const activeArea = 'M' + pts(tot).join('L') + 'L' + pts(c).reverse().join('L') + 'Z';
+  const grow = delay => ({ transformBox: 'fill-box', transformOrigin: 'bottom', transform: ready ? 'scaleY(1)' : 'scaleY(0)', transition: 'transform 1.1s ease ' + delay + 'ms' });
+  return (
+    <Card title="Customer growth vs churn" tag="Customers">
+      <svg viewBox="0 0 600 215" className="w-full" role="img" aria-label="Active customers growing faster than churned customers">
+        {[0, 1, 2, 3].map(k => { const v = (max * k) / 3; return <g key={k}><line x1={x0} x2={W - 6} y1={Y(v)} y2={Y(v)} stroke="#E1E7F5" strokeDasharray="3 4" /><text x="0" y={Y(v) + 5} fontSize="14" fill="#6B7699">{num(v)}</text></g>; })}
+        <g style={grow(0)}><path d={churnArea} fill="#F2A33A" fillOpacity=".85" /></g>
+        <g style={grow(250)}><path d={activeArea} fill="#5BB5EC" fillOpacity=".85" /></g>
+        {SAAS_MONTHS.map((m, i) => (i % 2 === 0 ? <text key={m + i} x={X(i)} y="208" fontSize="13" textAnchor="middle" fill="#6B7699">{m}</text> : null))}
+      </svg>
+      <div className="mt-2 flex gap-4 text-xs text-navy-900/75">{[['Active customers', '#5BB5EC'], ['Churned', '#F2A33A']].map(([l, col]) => <span key={l} className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-sm" style={{ background: col }} />{l}</span>)}</div>
+    </Card>
+  );
+}
+
+function ChurnCard({ p }) {
+  const ready = useReady();
+  const churn = Math.round((8.2 - p.ltv * 0.78) * 10) / 10;
+  const c = useTween(ready ? churn : 0, 1100), r = useTween(ready ? 100 - churn : 0, 1100);
+  const ret = Array.from({ length: 12 }, (_, i) => 100 - churn - (11 - i) * 0.4 + Math.sin(i * 2) * 0.25);
+  const lo = Math.min(...ret), hi = Math.max(...ret);
+  const spark = ret.map((v, i) => (i ? 'L' : 'M') + (4 + i * 13.6).toFixed(1) + ' ' + (52 - ((v - lo) / (hi - lo)) * 44).toFixed(1)).join(' ');
+  return (
+    <Card title="Customer churn and retention" tag="Health">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="text-center">
+          <div className="relative mx-auto h-28 w-28">
+            <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90" aria-hidden="true">
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#E8ECF8" strokeWidth="12" />
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#F2A33A" strokeWidth="12" strokeLinecap="round" pathLength="100" strokeDasharray={(ready ? churn * 5 : 0) + ' 100'} style={{ transition: 'stroke-dasharray 1.1s ease' }} />
+            </svg>
+            <b className="absolute inset-0 flex items-center justify-center text-xl tabular-nums">{c.toFixed(1)}%</b>
+          </div>
+          <p className="mt-2 text-xs text-navy-900/75">Current churn rate</p>
+        </div>
+        <div>
+          <p className="text-2xl font-extrabold tabular-nums">{r.toFixed(1)}%</p>
+          <p className="text-xs text-navy-900/75">Retention rate</p>
+          <svg viewBox="0 0 160 60" className="mt-2 w-full" aria-hidden="true"><path d={spark} pathLength="1" fill="none" stroke="#3D4DF2" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="drawin" /></svg>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function SaasPanel({ p }) {
+  return (
+    <div className="grid gap-4 lg:grid-cols-5">
+      <div className="min-w-0 lg:col-span-3"><MrrChart p={p} /></div>
+      <div className="lg:col-span-2"><PipelineFunnel p={p} /></div>
+      <div className="min-w-0 lg:col-span-3"><CustomerArea p={p} /></div>
+      <div className="lg:col-span-2"><ChurnCard p={p} /></div>
+    </div>
+  );
+}
+
+// ---------- Automation studio (inspired by a workflow-builder screenshot): the steps run one after another on their own ----------
+const FLOW = [
+  { label: 'Submit new project app', sub: 'Trigger', icon: 'M13 2L4 14h7l-1 8 9-12h-7z' },
+  { label: 'Proper application?', sub: 'Condition', icon: 'M12 3l9 9-9 9-9-9z' },
+  { label: 'Execute robotic process', sub: 'Action', icon: 'M8 8l-4 4 4 4M16 8l4 4-4 4' },
+  { label: 'Update system', sub: 'Condition', icon: 'M12 3l9 9-9 9-9-9z' },
+  { label: 'Send e-signature request', sub: 'Action', icon: 'M4 20h4L19 9l-4-4L4 16zM13 7l4 4' },
+  { label: 'Start AI document extraction', sub: 'Action', icon: 'M6 3h9l4 4v14H6zM9 12h7M9 16h7' },
+  { label: 'AI success?', sub: 'Condition', icon: 'M12 3l9 9-9 9-9-9z' },
+  { label: 'Update CRM via API', sub: 'Action', icon: 'M4 6h16M4 12h16M4 18h10' },
+];
+// Positions are in a 1048 by 588 drawing that is scaled to fit the screen. s is the step that lights the node up.
+const NODES = [
+  { s: 0, kind: 'square', x: 689, y: 80, w: 82, h: 82, label: 'Submit New Project App', icon: 'M13 2L4 14h7l-1 8 9-12h-7z' },
+  { s: 1, kind: 'diamond', x: 490, y: 82, label: 'Proper Application?', sub: 'Branch-1' },
+  { s: 2, kind: 'card', x: 374, y: 241, w: 82, h: 82, label: 'Execute Robotic Process', icon: 'M8 8l-4 4 4 4M16 8l4 4-4 4' },
+  { s: 3, kind: 'diamond', x: 374, y: 345, label: 'Update System', sub: 'Branch-2' },
+  { s: 4, kind: 'card', x: 425, y: 510, w: 82, h: 82, label: 'Send e-signature request', icon: 'M4 20h4L19 9l-4-4L4 16zM13 7l4 4' },
+  { s: -1, kind: 'card', x: 322, y: 510, w: 82, h: 82, lime: true, label: 'Send Warning Email', icon: 'M4 6h16v12H4zM4 7l8 6 8-6' },
+  { s: 5, kind: 'card', x: 584, y: 241, w: 82, h: 82, lime: true, label: 'Start AI Doc Extraction', icon: 'M6 3h9l4 4v14H6zM9 12h7M9 16h7' },
+  { s: 6, kind: 'diamond', x: 584, y: 377, label: 'AI Success?', sub: 'Branch-3' },
+  { s: 7, kind: 'card', x: 770, y: 241, w: 82, h: 82, label: 'Update CRM via API', icon: 'M4 6h16M4 12h16M4 18h10', badge: '1' },
+];
+// [path, lit once this step has finished]
+const LINES = [
+  ['M504 82 L648 82', 0], ['M730 82 L818 82', -1],
+  ['M490 97 L490 120 Q490 152 458 152 L400 152 Q374 152 374 178 L374 200', 1],
+  ['M490 120 Q490 152 522 152 L744 152 Q770 152 770 178 L770 200', 6],
+  ['M374 282 L374 326', 2],
+  ['M374 364 L374 392 Q374 412 354 412 L342 412 Q322 412 322 432 L322 470 M374 392 Q374 412 394 412 L405 412 Q425 412 425 432 L425 470', 3],
+  ['M584 282 L584 358', 5],
+  ['M584 396 L584 430 Q584 450 564 450 L553 450 Q533 450 533 470 L533 588 M584 430 Q584 450 604 450 L616 450 Q636 450 636 470 L636 588', 6],
+  ['M625 237 L730 237', -1],
+];
+const HANDLES = [[374, 201, '+'], [770, 201, '−'], [322, 470, '−'], [425, 470, '+'], [533, 560, '−'], [636, 560, '+']];
+const TILES = [['Request', 'M4 12h12M12 6l6 6-6 6'], ['Event Transform', 'M12 3v4M12 17v4M3 12h4M17 12h4M6 6l3 3M15 15l3 3'], ['Code', 'M8 8l-4 4 4 4M16 8l4 4-4 4'], ['', ''], ['Trigger', 'M13 2L4 14h7l-1 8 9-12h-7z'], ['Save to Story', 'M6 3h12v18l-6-4-6 4z'], ['Webhook', 'M7 17a4 4 0 110-8M17 17a4 4 0 100-8M8 13h8'], ['Terminal', 'M4 6h16v12H4zM8 10l3 2-3 2M13 14h3']];
+const TOOLS = ['M5 3l14 7-6 2-2 6z', 'M8 12V6a1.500 1.500 0 013 0v5M11 11V5a1.500 1.500 0 013 0v6M14 11V7a1.500 1.500 0 013 0v7c0 4-2 6-5 6s-5-2-6-5', 'M5 6h14M12 6v13', 'M12 4a8 8 0 100 16 8 8 0 000-16z', 'M7 3v14h14M3 7h14v14', 'M4 20l4-1 11-11-3-3L5 16z', 'M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4'];
+const checkIcon = <Icon d="M5 12.500l4.500 4.500L19 7" className="h-3 w-3" />;
+const abs = (l, t, w, h, extra) => ({ position: 'absolute', left: l, top: t, width: w, height: h, ...extra });
+const flexC = { display: 'flex', alignItems: 'center', justifyContent: 'center' };
+
+// Works out how much to shrink the 1048 wide drawing so it fits its box
+function useFit(w) {
+  const ref = useRef(null);
+  const [k, setK] = useState(0.6);
+  useEffect(() => {
+    const el = ref.current;
+    const update = () => setK(Math.min(el.clientWidth / w, 1.1));
+    update();
+    if (!('ResizeObserver' in window)) { window.addEventListener('resize', update); return () => window.removeEventListener('resize', update); }
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, k];
+}
+
+function StudioNode({ n, step }) {
+  const active = n.s === step, done = n.s >= 0 && n.s < step;
+  const badge = (l, tp) => done && <span style={{ ...abs(l, tp, 20, 20), borderRadius: 10, background: '#16B67A', color: '#fff', ...flexC }}>{checkIcon}</span>;
+  if (n.kind === 'diamond') {
+    return (
+      <div style={abs(n.x, n.y, 0, 0)}>
+        <div style={{ ...abs(-14, -14, 28, 28), ...flexC, borderRadius: 7, background: '#5B5FE0', boxShadow: active ? '0 0 0 7px rgba(91,95,224,.3)' : 'none', transform: 'rotate(45deg) scale(' + (active ? 1.2 : 1) + ')', transition: 'transform .4s ease, box-shadow .4s ease' }}><span style={{ transform: 'rotate(-45deg)', color: '#fff', fontSize: 16, lineHeight: 1 }}>×</span></div>
+        <div style={{ position: 'absolute', left: 26, top: -17, whiteSpace: 'nowrap' }}><b style={{ fontSize: 13 }}>{n.label}</b><div style={{ fontSize: 10, color: '#6B7699' }}>{n.sub}</div></div>
+        {badge(8, -30)}
+      </div>
+    );
+  }
+  const sq = n.kind === 'square';
+  return (
+    <div style={{ ...abs(n.x - n.w / 2, n.y - n.h / 2, n.w, n.h), ...flexC, flexDirection: 'column', gap: 6, padding: 6, textAlign: 'center', borderRadius: 14, background: sq ? 'linear-gradient(135deg,#7C84F5,#5B5FE0)' : n.lime ? '#C8F560' : '#fff', color: sq ? '#fff' : '#141A3D', boxShadow: active ? '0 0 0 5px rgba(61,77,242,.35), 0 12px 26px rgba(20,26,61,.2)' : '0 2px 8px rgba(20,26,61,.12)', transform: active ? 'scale(1.08)' : 'none', transition: 'transform .4s ease, box-shadow .4s ease' }}>
+      <span style={{ ...flexC, width: 30, height: 30, borderRadius: 9, background: sq ? 'rgba(255,255,255,.2)' : n.lime ? 'rgba(20,26,61,.12)' : '#F1F4FC', color: sq ? '#fff' : '#3D4DF2' }}><Icon d={n.icon} className="h-4 w-4" /></span>
+      <span style={{ fontSize: 10.5, fontWeight: 700, lineHeight: 1.2 }}>{n.label}</span>
+      {n.badge && <span style={{ ...abs(n.w - 14, -6, 20, 20), ...flexC, borderRadius: 10, background: '#111', color: '#fff', fontSize: 10 }}>{n.badge}</span>}
+      {badge(-7, -7)}
+    </div>
+  );
+}
+
+function WorkflowStudio({ step }) {
+  const [ref, k] = useFit(1048);
+  const runs = useLive(1284, 1, 3, 1500);
+  const cur = step < 8 ? NODES.find(n => n.s === step) : null;
+  const cx = cur ? cur.x + 16 : 800, cy = cur ? cur.y + 18 : 548;
+  const pct = ((Math.min(step, 7) + 1) / 8) * 100;
+  return (
+    <div ref={ref} role="img" aria-label="Animated workflow builder: automation steps light up one after another" className="w-full overflow-hidden" style={{ height: 588 * k, background: '#E6F0FB' }}>
+      <div aria-hidden="true" style={{ width: 1048, height: 588, transform: 'scale(' + k + ')', transformOrigin: 'top left', position: 'relative', color: '#141A3D', backgroundImage: 'radial-gradient(#C3D2EE 1.2px, transparent 1.2px)', backgroundSize: '20px 20px' }}>
+        <svg width="1048" height="588" style={{ position: 'absolute', left: 0, top: 0 }}>
+          {LINES.map(([d, after], i) => { const lit = after >= 0 && step > after; return <path key={i} d={d} fill="none" className="flow" stroke={lit ? '#3D4DF2' : '#8D99BA'} strokeWidth={lit ? 2.4 : 1.5} strokeLinecap="round" style={{ transition: 'stroke .4s' }} />; })}
+        </svg>
+        <div style={abs(823, 75, 14, 14, { borderRadius: 7, background: '#111' })} /><b style={{ position: 'absolute', left: 816, top: 52, fontSize: 12 }}>Start</b>
+        {HANDLES.map(([x, y, s]) => <span key={x + '-' + y} style={{ ...abs(x - 10, y - 10, 20, 20), ...flexC, borderRadius: 10, background: '#fff', border: '1px solid #B5C0DE', fontSize: 13, lineHeight: 1 }}>{s}</span>)}
+        {NODES.map(n => <StudioNode key={n.label} n={n} step={step} />)}
+
+        <div style={abs(0, 0, 77, 588, { background: '#0E0E10' })}>
+          <span style={{ ...abs(24, 10, 30, 30), ...flexC, color: '#C8F560', fontWeight: 800, fontSize: 20 }}>N</span>
+          {['M4 11l8-7 8 7v9h-5v-6H9v6H4z', 'M7 4v6M17 4v6M7 10h10v4M12 14v6', 'M4 7h16v12H4zM4 11h16', 'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21c0-4 3.500-6 8-6s8 2 8 6', 'M4 8h16v10H4zM8 8V5h8v3', 'M12 3a9 9 0 100 18 9 9 0 000-18z'].map((d, i) => <span key={i} style={{ ...abs(20, 52 + i * 38, 36, 34), ...flexC, borderRadius: 10, background: i === 1 ? '#C8F560' : 'transparent', color: i === 1 ? '#111' : '#8B8D96' }}><Icon d={d} className="h-4 w-4" /></span>)}
+        </div>
+
+        <div style={abs(77, 0, 189, 588, { background: '#fff', borderRight: '1px solid #E1E7F5' })}>
+          <div style={abs(11, 8, 167, 32, { ...flexC, justifyContent: 'flex-start', gap: 6, padding: '0 10px', background: '#F4F7FD', borderRadius: 10, fontSize: 12, fontWeight: 700 })}>Deal approval flow</div>
+          <div style={abs(11, 52, 167, 36, { ...flexC, justifyContent: 'flex-start', padding: '0 12px', background: '#F4F7FD', borderRadius: 10, fontSize: 11, color: '#6B7699' })}>Search elements...</div>
+          <div style={{ position: 'absolute', left: 11, top: 98, fontSize: 10, fontWeight: 700, color: '#6B7699', display: 'flex', gap: 14 }}><span style={{ color: '#141A3D', borderBottom: '2px solid #141A3D', paddingBottom: 3 }}>CORE</span><span>HELPERS</span><span>TRIGGERS</span></div>
+          <b style={{ position: 'absolute', left: 11, top: 126, fontSize: 11 }}>Actions Blocks (8)</b>
+          {TILES.map(([name, d], i) => name && (
+            <div key={name} style={{ ...abs(11 + (i % 2) * 83, 143 + Math.floor(i / 2) * 83, 83, 83), ...flexC, flexDirection: 'column', gap: 6, borderRight: '1px solid #EEF1F8', borderBottom: '1px solid #EEF1F8', fontSize: 10.5, fontWeight: 600 }}>
+              <Icon d={d} className="h-5 w-5" />{name}
+              {name === 'Trigger' && <span style={{ position: 'absolute', right: 6, top: 6, background: '#C8F560', borderRadius: 6, fontSize: 8, fontWeight: 800, padding: '1px 5px' }}>New</span>}
+            </div>
+          ))}
+          <div className="float" style={abs(100, 225, 86, 86, {})}><div style={{ ...flexC, flexDirection: 'column', gap: 6, width: '100%', height: '100%', borderRadius: 12, background: 'linear-gradient(135deg,#7C84F5,#5B5FE0)', color: '#fff', fontSize: 10.5, fontWeight: 700, transform: 'rotate(-6deg)', boxShadow: '0 14px 24px rgba(91,95,224,.4)' }}><Icon d="M4 6c0-2 16-2 16 0v12c0 2-16 2-16 0zM4 12c0 2 16 2 16 0" className="h-5 w-5" />Data Map</div></div>
+          {['Agari (3)', 'Airtable (10)', 'Abuse.ch (4)'].map((a, i) => <div key={a} style={{ position: 'absolute', left: 11, top: 488 + i * 36, width: 167, fontSize: 11, fontWeight: 700, display: 'flex', justifyContent: 'space-between' }}>{a}<span style={{ color: '#6B7699' }}>⌄</span></div>)}
+        </div>
+
+        <div style={abs(285, 4, 175, 28, { ...flexC, justifyContent: 'flex-start', gap: 8, padding: '0 6px', background: '#fff', borderRadius: 14, fontSize: 10.5, fontWeight: 700 })}><span style={{ ...flexC, width: 22, height: 22, borderRadius: 11, background: '#5B5FE0', color: '#fff', fontSize: 10 }}>S</span><span>Sam Rivera<br /><span style={{ fontWeight: 500, color: '#6B7699', fontSize: 8.5 }}>sam@nexora.example</span></span></div>
+        <span style={{ ...abs(475, 3, 30, 30), ...flexC, borderRadius: 15, background: '#fff' }}><Icon d="M6 16V11a6 6 0 0112 0v5l2 2H4zM10 20h4" className="h-4 w-4" /></span>
+        <span style={{ ...abs(515, 3, 30, 30), ...flexC, borderRadius: 15, background: '#fff' }}><Icon d="M12 15a3 3 0 100-6 3 3 0 000 6zM19 12h2M3 12h2M12 3v2M12 19v2" className="h-4 w-4" /></span>
+        <span style={abs(600, 8, 190, 24, { ...flexC, gap: 8, borderRadius: 12, background: '#fff', fontSize: 11, fontWeight: 700 })}><LiveDot />{num(runs)} runs today</span>
+        {[['#F2A33A', 'A'], ['#16B67A', 'M'], ['#5B5FE0', 'J']].map(([c, l], i) => <span key={l} style={{ ...abs(878 + i * 22, 12, 28, 28), ...flexC, borderRadius: 14, background: c, color: '#fff', fontSize: 10, fontWeight: 700, border: '2px solid #fff' }}>{l}</span>)}
+        <span style={{ ...abs(946, 12, 28, 28), ...flexC, borderRadius: 14, background: '#5B5FE0', color: '#fff', fontSize: 16 }}>+</span>
+
+        <div style={abs(942, 135, 40, 258, { borderRadius: 20, background: '#101012' })}>{TOOLS.map((d, i) => <span key={i} style={{ ...abs(5, 8 + i * 35, 30, 30), ...flexC, borderRadius: 15, background: i === 0 ? '#C8F560' : 'transparent', color: i === 0 ? '#111' : '#9A9CA6' }}><Icon d={d} className="h-4 w-4" /></span>)}</div>
+        <div style={abs(942, 403, 40, 72, { borderRadius: 20, background: '#101012' })}>{['M9 7L4 12l5 5M4 12h10a6 6 0 010 8', 'M15 7l5 5-5 5M20 12H10a6 6 0 000 8'].map((d, i) => <span key={i} style={{ ...abs(5, 5 + i * 31, 30, 30), ...flexC, color: '#C9CBD3' }}><Icon d={d} className="h-4 w-4" /></span>)}</div>
+
+        <div style={abs(690, 337, 226, 241, { borderRadius: 16, background: 'linear-gradient(160deg,#7C84F5,#5B5FE0)', overflow: 'hidden', boxShadow: '0 16px 32px rgba(61,77,242,.3)' })}>
+          <svg width="226" height="130" style={{ position: 'absolute', left: 0, top: 0 }}><g stroke="rgba(255,255,255,.4)" fill="none" strokeWidth="1.2"><path d="M60 0V40L110 60H226" /><path d="M130 0V28" /><path d="M0 90H70L100 70" /><path d="M180 0V50" /></g><g fill="#C8F560"><circle cx="110" cy="60" r="4" /><circle cx="180" cy="50" r="4" /><circle cx="130" cy="28" r="4" /></g></svg>
+          <span style={{ ...abs(22, 30, 38, 38), ...flexC, borderRadius: 11, background: 'rgba(255,255,255,.22)', color: '#fff' }}><Icon d="M12 4a8 8 0 100 16 8 8 0 000-16zM12 9a3 3 0 100 6 3 3 0 000-6z" className="h-5 w-5" /></span>
+          <span style={{ ...abs(196, 8, 22, 22), ...flexC, borderRadius: 11, background: '#111', color: '#fff', fontSize: 14 }}>×</span>
+          <div style={abs(8, 112, 210, 121, { background: '#fff', borderRadius: 12, padding: 12 })}>
+            <b style={{ fontSize: 12.5, display: 'block' }}>{step < 8 ? FLOW[step].label : 'Workflow complete'}</b>
+            <p style={{ margin: '4px 0 0', fontSize: 9.5, lineHeight: 1.35, color: '#5A6485' }}>{step < 8 ? 'Running now. Nexora passes the result to the next step and logs it in your activity feed.' : 'All steps finished. Every action is logged with a time and a result.'}</p>
+            <div style={{ height: 6, borderRadius: 3, background: '#E8ECF8', marginTop: 8 }}><div style={{ height: 6, borderRadius: 3, background: '#3D4DF2', width: pct + '%', transition: 'width .6s ease' }} /></div>
+            <div style={{ marginTop: 9, height: 28, borderRadius: 8, background: '#111', color: '#fff', fontSize: 11, fontWeight: 700, ...flexC }}>Update process</div>
+          </div>
+        </div>
+
+        <div style={{ position: 'absolute', left: cx, top: cy, zIndex: 5, pointerEvents: 'none', transition: 'left .9s cubic-bezier(.4,0,.2,1), top .9s cubic-bezier(.4,0,.2,1)' }}>
+          <svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 3l14 7-6 2-2 6z" fill="#141A3D" stroke="#fff" strokeWidth="1.5" strokeLinejoin="round" /></svg>
+          <span style={{ marginLeft: 14, marginTop: -2, display: 'inline-block', background: '#3D4DF2', color: '#fff', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 8 }}>Sam</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Automation() {
+  const [step, setStep] = useState(0); // 0 to 7 = that step is running, 8 and 9 = everything finished
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setStep(8); return; }
+    const t = setInterval(() => setStep(s => (s + 1) % 10), 1300);
+    return () => clearInterval(t);
+  }, []);
+  const runs = useLive(1284, 1, 3, 1500), saved = useLive(420, 1, 3, 2200);
+  const finished = step >= 8, now = FLOW[Math.min(step, 7)];
+  return (
+    <section className="bg-mist py-20">
+      <div className="mx-auto max-w-6xl px-5">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-extrabold sm:text-4xl">Automate the busywork</h2>
+          <p className="mt-3 text-navy-900/80">Build a workflow once and Nexora runs it every time: contracts go out, the CRM updates and invoices appear without anyone lifting a finger.</p>
+        </Reveal>
+        <Reveal delay={120} className="mt-10">
+          <div className="hidden overflow-hidden rounded-2xl border-4 border-azure bg-white shadow-xl shadow-azure/25 md:block"><WorkflowStudio step={step} /></div>
+          <div className="overflow-hidden rounded-2xl border-4 border-azure bg-white text-navy-900 shadow-xl shadow-azure/25 md:hidden">
+            <div className="flex flex-wrap items-center gap-2 border-b border-line px-4 py-3">
+              <b className="mr-auto">Deal approval workflow</b>
+              <span className="rounded-full bg-mist px-3 py-1 text-xs font-bold tabular-nums">Runs today {num(runs)}</span>
+              <span className="flex items-center gap-1.5 rounded-full bg-[#16B67A]/15 px-3 py-1 text-xs font-bold text-[#0f8a5a]"><LiveDot />Running</span>
+            </div>
+            <ol className="space-y-2 p-3">
+              {FLOW.map((n, i) => (
+                <li key={n.label} className={'flex items-center gap-3 rounded-xl border p-3 transition-all duration-500 ' + (i === step ? 'border-azure bg-azure text-white' : i < step ? 'border-[#16B67A]/50 bg-white' : 'border-line bg-white')}>
+                  <span className={'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ' + (i === step ? 'bg-white/20' : 'bg-mist text-azure')}><Icon d={n.icon} className="h-5 w-5" /></span>
+                  <span className="min-w-0 flex-1 text-sm font-bold leading-tight">{n.label}<span className={'block text-xs font-medium ' + (i === step ? 'text-white/85' : 'text-navy-900/75')}>{n.sub}</span></span>
+                  {i < step && <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#16B67A] text-white">{checkIcon}</span>}
+                </li>
+              ))}
+            </ol>
+            <div className="m-3 mt-0 rounded-xl bg-mist p-3">
+              <p className="text-xs text-navy-900/75">{finished ? 'All steps complete' : 'Now running'}: <b className="text-navy-900">{finished ? 'Workflow finished' : now.label}</b> · Hours saved {(saved / 10).toFixed(1)}h</p>
+              <div className="mt-2 h-2 rounded-full bg-white"><div className="h-2 rounded-full bg-azure" style={{ width: (finished ? 100 : ((step + 1) / 8) * 100) + '%', transition: 'width .6s ease' }} /></div>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+
+// Fades and slides its children in when they scroll into view
+function Reveal({ children, delay = 0, className = '' }) {
+  const [ref, seen] = useInView();
+  return <div ref={ref} className={'reveal ' + (seen ? 'in ' : '') + className} style={{ transitionDelay: delay + 'ms' }}>{children}</div>;
+}
+
+// Swaps the headline phrase every few seconds (stays still for people who prefer less motion)
+function Rotator({ words }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = setInterval(() => setI(n => (n + 1) % words.length), 2800);
+    return () => clearInterval(t);
+  }, []);
+  return <span key={i} className="swap block text-mint">{words[i]}</span>;
+}
+
+function Hero() {
+  const [open, setOpen] = useState(false);
+  return (
+    <section id="top" className="overflow-hidden bg-navy-900 text-white">
+      <div className="mx-auto max-w-6xl px-5">
+        <div className="flex h-20 items-center justify-between">
+          <Logo />
+          <nav className="hidden items-center gap-8 text-sm font-medium text-white/80 lg:flex" aria-label="Main">
+            {navLinks.map(([l, hr]) => <a key={hr} href={hr} className="transition hover:text-white">{l}</a>)}
+            <a href="#pricing" className={btn}>Start a free trial</a>
+          </nav>
+          <button className="rounded-lg p-2 lg:hidden" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Toggle menu">
+            <Icon d={open ? 'M6 6l12 12M18 6L6 18' : 'M4 7h16M4 12h16M4 17h16'} className="h-6 w-6" />
+          </button>
+        </div>
+        {open && (
+          <nav className="pb-4 lg:hidden" aria-label="Mobile">
+            {navLinks.map(([l, hr]) => <a key={hr} href={hr} onClick={() => setOpen(false)} className="block py-3 font-medium">{l}</a>)}
+            <a href="#pricing" onClick={() => setOpen(false)} className={btn + ' mt-2 w-full'}>Start a free trial</a>
+          </nav>
+        )}
+        <div className="grid items-center gap-14 pb-24 pt-10 lg:grid-cols-2 lg:pb-32 lg:pt-16">
+          <div>
+            <h1 className="text-4xl font-extrabold leading-[1.1] sm:text-5xl lg:text-6xl">
+              Close more deals
+              <span className="block min-h-[2.3em]"><Rotator words={['from one calm workspace.', 'with a forecast you trust.', 'without chasing invoices.']} /></span>
+            </h1>
+            <p className="mt-2 max-w-md text-base leading-relaxed text-white/85">Nexora brings your pipeline, billing and customer conversations together, so every team works from the same numbers.</p>
+            <a href="#pricing" className={textLink + ' mt-8 text-mint'}>Start a free trial <Icon d="M5 12h14M13 6l6 6-6 6" className="h-4 w-4" /></a>
+          </div>
+          <div className="relative mx-auto w-full max-w-md lg:max-w-lg">
+            <img src={IMG.hero} alt="Four colleagues smiling at a laptop in a bright office" width="800" height="640" fetchpriority="high" className="aspect-[5/4] w-full rounded-2xl object-cover shadow-2xl shadow-black/30 ring-1 ring-white/10" />
+            <HeroLive />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Features() {
+  return (
+    <section id="features">
+      <div className="bg-white pb-12 pt-14">
+        <p className="mb-8 px-5 text-center text-sm text-navy-900/75">Works alongside the tools your team already uses</p>
+        <div className="mx-auto max-w-5xl overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
+          <div className="marquee flex w-max">
+            {[0, 1].map(copy => (
+              <div key={copy} className={'flex shrink-0 items-center gap-16 pr-16 ' + (copy ? 'marquee-dup' : '')} aria-hidden={copy ? 'true' : undefined}>
+                {IMG.logos.map(([name, src]) => <img key={name} src={src} alt={copy ? '' : name} height="36" loading="lazy" className="h-9 w-auto" />)}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="bg-mist pb-6 pt-16">
+        <div className="mx-auto grid max-w-6xl gap-10 px-5 md:grid-cols-3">
+          {perks.map((p, i) => (
+            <Reveal key={p.title} delay={i * 120} className="h-full">
+              <div className="flex h-full gap-4 rounded-2xl bg-azure p-5 text-white shadow-lg shadow-azure/25 transition duration-300 hover:-translate-y-1">
+                <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-azure"><Icon d={p.icon} /></span>
+                <div><h3 className="font-bold">{p.title}</h3><p className="mt-2 text-sm leading-relaxed text-white/90">{p.text}</p></div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <div className="pt-10">
+          <Showcase title="Track your progress with our advanced dashboard." text="See pipeline, revenue and open invoices on one screen. Everything updates as your team works, so there is nothing to export."
+            visual={<LiveDashboard />} />
+          <Showcase reverse title="Make your customers happy by giving great service." text="Give support, sales and finance one shared view of each customer, and every conversation starts with the full story."
+            visual={<SupportDesk />} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Pricing() {
+  const [yearly, setYearly] = useState(true);
+  return (
+    <section id="pricing" className="bg-white py-20">
+      <div className="mx-auto max-w-5xl px-5">
+        <div className="text-center">
+          <h2 className="text-3xl font-extrabold sm:text-4xl">Pricing &amp; plans</h2>
+          <p className="mx-auto mt-3 max-w-md text-navy-900/85">Pay per seat. Switch plans or cancel whenever you like.</p>
+          <div className="mt-7 inline-flex items-center gap-3 text-sm font-semibold">
+            <span className={yearly ? 'text-navy-900/65' : ''}>Monthly</span>
+            <button role="switch" aria-checked={yearly} aria-label="Bill yearly" onClick={() => setYearly(!yearly)} className="relative h-6 w-11 rounded-full bg-azure transition">
+              <i className={'absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ' + (yearly ? 'left-[22px]' : 'left-0.5')} />
+            </button>
+            <span className={yearly ? '' : 'text-navy-900/65'}>Yearly</span>
+            <span className="rounded bg-azure/10 px-2 py-0.5 text-xs text-azure">Save 20%</span>
+          </div>
+        </div>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {plans.map(p => (
+            <div key={p.name} className={'flex flex-col rounded-xl border bg-white p-7 transition duration-300 hover:-translate-y-1 ' + (p.featured ? 'border-azure shadow-xl shadow-azure/15' : 'border-line')}>
+              <p className="text-xs font-bold text-azure">{p.name}</p>
+              <p className="mt-3"><span className="text-4xl font-extrabold">${yearly ? Math.round(p.price * 0.8) : p.price}</span><span className="text-sm text-navy-900/75"> / seat / month</span></p>
+              <ul className="mt-6 flex-1 space-y-3 text-sm">
+                {p.items.map(i => <li key={i} className="flex gap-2.5"><Icon d="M5 12.5l4.5 4.5L19 7" className="mt-0.5 h-4 w-4 shrink-0 text-azure" />{i}</li>)}
+              </ul>
+              <a href="#contact" className={(p.featured ? btn : 'inline-flex items-center justify-center rounded-lg border border-azure px-5 py-3 text-sm font-bold text-azure transition hover:bg-azure hover:text-white') + ' mt-8'}>Start free trial</a>
+              <p className="mt-3 text-center text-xs text-navy-900/65">No credit card required</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Testimonials() {
+  return (
+    <section id="customers" className="bg-mist py-20">
+      <div className="mx-auto max-w-6xl px-5">
+        <h2 className="text-center text-3xl font-extrabold sm:text-4xl">Teams that closed the spreadsheet</h2>
+        <div className="mt-12 grid gap-10 md:grid-cols-3">
+          {quotes.map((q, i) => (
+            <Reveal key={q.name} delay={i * 130} className="h-full">
+              <figure className="flex h-full flex-col rounded-2xl bg-azure p-6 text-white shadow-lg shadow-azure/25 transition duration-300 hover:-translate-y-1">
+                <svg viewBox="0 0 24 24" className="h-8 w-8 text-white/75" fill="currentColor" aria-hidden="true"><path d="M4 18v-5c0-4 2-6.500 6-7v3c-2 .5-3 1.500-3 3.500h3V18zM14 18v-5c0-4 2-6.500 6-7v3c-2 .5-3 1.500-3 3.500h3V18z" /></svg>
+                <blockquote className="mt-3 flex-1 leading-relaxed">{q.text}</blockquote>
+                <figcaption className="mt-6 flex items-center gap-3 text-sm text-white/90">
+                  <img src={IMG.people[q.photo]} alt="" width="48" height="48" loading="lazy" className="h-12 w-12 rounded-full object-cover ring-2 ring-white/60" />
+                  <span><b className="block text-white">{q.name}</b>{q.role}</span>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Contact() {
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [errors, setErrors] = useState({});
+  const [sent, setSent] = useState(false);
+  const update = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const submit = e => {
+    e.preventDefault();
+    const found = {};
+    if (!form.name.trim()) found.name = 'Enter your name.';
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) found.email = 'Enter a valid email, like you@company.com.';
+    if (form.message.trim().length < 10) found.message = 'Tell us a little more (at least 10 characters).';
+    setErrors(found);
+    // Demo only: to send real messages, post `form` to your backend or a form service here.
+    if (!Object.keys(found).length) setSent(true);
+  };
+  const field = 'mt-2 w-full rounded-lg border bg-white px-4 py-3 placeholder:text-navy-900/40 focus:border-azure focus:outline-none focus:ring-2 focus:ring-azure/30 ';
+  return (
+    <section id="contact" className="bg-white py-20">
+      <div className="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-2">
+        <div>
+          <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">Talk to a person, not a chatbot.</h2>
+          <p className="mt-4 max-w-md text-navy-900/85">Tell us about your team and we’ll reply within one business day with a tailored walkthrough.</p>
+          <p className="mt-8 text-sm text-navy-900/75">Email</p><p className="font-bold">hello@nexora.example</p>
+          <p className="mt-4 text-sm text-navy-900/75">Support hours</p><p className="font-bold">Monday to Friday, 8am to 6pm</p>
+        </div>
+        <div className="rounded-xl border border-line bg-mist p-6 sm:p-8">
+          {sent ? (
+            <div role="status" className="py-8 text-center">
+              <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-azure text-white"><Icon d="M5 12.5l4.5 4.5L19 7" className="h-7 w-7" /></span>
+              <h3 className="mt-5 text-2xl font-extrabold">Message sent</h3>
+              <p className="mt-2 text-navy-900/85">Thanks, {form.name.split(' ')[0]}. We’ll reply to {form.email} soon.</p>
+              <button onClick={() => { setSent(false); setForm({ name: '', email: '', message: '' }); }} className={btn + ' mt-6'}>Send another message</button>
+            </div>
+          ) : (
+            <form onSubmit={submit} noValidate className="space-y-5">
+              {[['name', 'Full name', 'text', 'Jordan Lee'], ['email', 'Work email', 'email', 'you@company.com']].map(([k, label, type, ph]) => (
+                <div key={k}>
+                  <label htmlFor={k} className="text-sm font-bold">{label}</label>
+                  <input id={k} name={k} type={type} value={form[k]} onChange={update} placeholder={ph} aria-invalid={!!errors[k]} className={field + (errors[k] ? 'border-red-500' : 'border-line')} />
+                  {errors[k] && <p className="mt-1.5 text-sm text-red-600">{errors[k]}</p>}
+                </div>
+              ))}
+              <div>
+                <label htmlFor="message" className="text-sm font-bold">How can we help?</label>
+                <textarea id="message" name="message" rows="4" value={form.message} onChange={update} placeholder="We have 20 sellers and track deals in three tools…" aria-invalid={!!errors.message} className={field + (errors.message ? 'border-red-500' : 'border-line')} />
+                {errors.message && <p className="mt-1.5 text-sm text-red-600">{errors.message}</p>}
+              </div>
+              <button type="submit" className={btn + ' w-full'}>Send message</button>
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="bg-navy-900 text-white">
+      <div className="mx-auto max-w-6xl px-5 pt-14">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+          <div><Logo /><p className="mt-4 max-w-[14rem] text-sm leading-relaxed text-white/75">One calm workspace for pipeline, billing and customers.</p></div>
+          {footerCols.map(([title, links]) => (
+            <div key={title}>
+              <h4 className="text-sm font-bold">{title}</h4>
+              <ul className="mt-4 space-y-2.5 text-sm text-white/75">{links.map(l => <li key={l}><a href="#top" className="transition hover:text-white">{l}</a></li>)}</ul>
+            </div>
+          ))}
+        </div>
+        <div className="mt-12 border-t border-white/10 py-6 text-sm text-white/50">© 2026 Nexora, Inc. All rights reserved.</div>
+      </div>
+    </footer>
+  );
+}
+
+function App() {
+  return (<><Hero /><main><LiveStats /><Features /><HowItWorks /><Lazy id="automation" minH={720}><Automation /></Lazy><Lazy id="demo" minH={900}><Demo /></Lazy><Pricing /><Testimonials /><Faq /><FinalCta /><Contact /></main><Footer /><StickyBar /><ChatButton /></>);
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
